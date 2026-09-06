@@ -1,0 +1,66 @@
+import heapq
+
+class Solution:
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        """
+        Given an array, size k.
+        Slides left to right
+        for every iter, we get the max of the window.
+        then add this max to a running list order.
+
+        Thoughts:
+        naive: Get max() of each window but this is O(k) which is bad. And we are creating a new array every time so this is bad for space and time as well
+        We can add on to the window until we reach k, and once more than k (k+1) decrease from the left. if the element we decrease from the left is the maximum we need to check again if the same left exists  in the current window?
+
+        --> maintain a max heap to get the current next max out --> after popping, do a heapify which is log(n). Building from the start is O(n)
+        
+        """
+
+
+        left = 0
+        result = []
+        array = []
+        heapq.heapify(array)
+        for right in range(len(nums)):
+            heapq.heappush(array,(-nums[right], right))
+
+            while array[0][1] < (right - k)+1:
+                    heapq.heappop(array) #remove all previous stale elements...
+
+
+            while right - left + 1 > k:
+                left += 1
+
+            
+
+            if right - left + 1 == k:
+                result.append(-array[0][0]) #append the max
+
+        
+        return result
+
+
+        """
+        rundown
+        1 2 1 0 4 2 6
+              l   r
+        -6
+        -4
+        -2
+        -1
+        -1
+        [2,2,4]
+
+
+        4 5 6 1 2 3
+            l 
+
+        6
+        5
+        4,0
+        6 6 6 3
+        """
+
+
+
+        
